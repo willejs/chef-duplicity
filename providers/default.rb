@@ -19,10 +19,12 @@ action :backup do
   base_command_options << "--s3-unencrypted-connection" if new_resource.s3_unencrypted_connection
   base_command_options << "--s3-use-multiprocessing" if new_resource.s3_use_multiprocessing
 
-  run_duplicity("#{base_command_options.join(" ")} #{new_resource.source} #{new_resource.destination}", {
+  status = run_duplicity("#{base_command_options.join(" ")} #{new_resource.source} #{new_resource.destination}", {
     "AWS_ACCESS_KEY_ID"     => new_resource.aws_access_key,
     "AWS_SECRET_ACCESS_KEY" => new_resource.aws_secret_access_key
   })
+
+  new_resource.updated_by_last_action(status.exitstatus == 0)
 end
 
 action :restore do
@@ -33,10 +35,12 @@ action :restore do
 
   base_command_options << "--file-to-restore #{new_resource.file_to_restore}" if new_resource.file_to_restore
 
-  run_duplicity("#{base_command_options.join(" ")} #{new_resource.source} #{new_resource.destination}", {
+  status = run_duplicity("#{base_command_options.join(" ")} #{new_resource.source} #{new_resource.destination}", {
     "AWS_ACCESS_KEY_ID"     => new_resource.aws_access_key,
     "AWS_SECRET_ACCESS_KEY" => new_resource.aws_secret_access_key
   })
+
+  new_resource.updated_by_last_action(status.exitstatus == 0)
 end
 
 action :verify do
@@ -44,10 +48,12 @@ action :verify do
   
   base_command_options << "--file-to-restore #{new_resource.file_to_restore}" if new_resource.file_to_restore
 
-  run_duplicity("#{new_resource.base_command_options.join(" ")} #{new_resource.source} #{new_resource.destination}", {
+  status = run_duplicity("#{new_resource.base_command_options.join(" ")} #{new_resource.source} #{new_resource.destination}", {
     "AWS_ACCESS_KEY_ID"     => new_resource.aws_access_key,
     "AWS_SECRET_ACCESS_KEY" => new_resource.aws_secret_access_key
   })
+
+  new_resource.updated_by_last_action(status.exitstatus == 0)
 end
 
 private
