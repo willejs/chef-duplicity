@@ -9,6 +9,7 @@ python_packages = value_for_platform(
 
 system_packages = value_for_platform(
   [ "amazon", "centos" ]  => { "default" => [ "librsync-devel" ] },
+  [ "ubuntu", "debian" ] => { "default" => [ "librsync-dev" ] },
   "default"   => [ "librsync-devel" ]
 )
 
