@@ -10,6 +10,7 @@ an LWRP for issuing backup, restore, and verification tasks.
 ### Platforms
 
 * CentOS 6.3
+* Ubuntu 12.04
 
 ### Cookbooks
 
